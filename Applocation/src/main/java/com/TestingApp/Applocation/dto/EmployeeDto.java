@@ -5,8 +5,7 @@ import lombok.*;
 import java.util.Objects;
 @Builder
 @Data
-@Getter
-@Setter
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +17,6 @@ public class EmployeeDto {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (!(o instanceof EmployeeDto that)) return false;
         return Objects.equals(getId(), that.getId()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getName(), that.getName()) && Objects.equals(getSalary(), that.getSalary());
     }

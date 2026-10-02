@@ -5,6 +5,7 @@ import com.TestingApp.Applocation.dto.EmployeeDto;
 import com.TestingApp.Applocation.entities.Employee;
 import com.TestingApp.Applocation.repositories.EmployeeRepository;
 import com.TestingApp.Applocation.services.EmployeeService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,9 +21,11 @@ import org.springframework.context.annotation.Import;
 
 import javax.swing.text.html.Option;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -40,40 +43,67 @@ class EmployeeServiceImplTest {
     @InjectMocks
     private EmployeeServiceImpl employeeService;
 
+    private Employee mockEmployee;
+    private EmployeeDto mockEmployeeDto;
+    @BeforeEach
+    void setUp(){
+        mockEmployee=Employee.builder()
+                .id(1L)
+                .email("nehaaa@gmail.com")
+                .name("neha")
+                .salary(100L)
+                .build();
+        mockEmployeeDto = modelMapper.map(mockEmployee, EmployeeDto.class);
+    }
+
    @Test
     void testgetEmployeeById_whenIdIsPresent_thenReturnEmployeeDto() {
 
 
-       //assign
-       Long id=1L;
-       Employee mockEmployee =Employee.builder()
-               .id(id)
-               .email("nehaaa@gmail.com")
-               .name("neha")
-               .salary(100L)
-               .build();
 
-       when(employeeRepository.findById(id)).thenReturn(Optional.of(mockEmployee));
+
+       when(employeeRepository.findById(1L)).thenReturn(Optional.of(mockEmployee));
        //act
 
-       EmployeeDto employeeDto = employeeService.getEmployeeById(id);
+       EmployeeDto employeeDto = employeeService.getEmployeeById(1L);
 
        //assert
-      assertThat(employeeDto.getId()).isEqualTo(id);
+      assertThat(employeeDto.getId()).isEqualTo(1L);
       assertThat(employeeDto.getEmail()).isEqualTo(mockEmployee.getEmail());
-      verify(employeeRepository,only()).findById(id);
+      verify(employeeRepository,only()).findById(1L);
    }
-   @Test
-    void testCreateNewEmployee_whenValidEmployee_ThenCreateNewEmployee(){
-       //assign
-       when(employeeRepository.findByEmail(""))
-
-       //act
-
-       //assert
+    @Test
+    void testCreateNewEmployee_whenAttemptingToCreateEmployeeWithExistingEmail_thenThrowException(){
+   //     arrange
 
 
-   }
+        when(employeeRepository.findByEmail(mockEmployeeDto.getEmail())).thenReturn(List.of(mockEmployee));
+
+
+    //    act and assert
+        assertThatThrownBy(()->employeeService.createNewEmployee(mockEmployeeDto))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Employee already exists with email: " + mockEmployee.getEmail());
+
+        verify(employeeRepository).findByEmail(mockEmployeeDto.getEmail());
+        verify(employeeRepository,never()).save(any());
+
+    }
+     @Test
+     void testGetEmployeeById_whenEmployeeIsNotPresent_thenThrowException(){
+        when(employeeRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(()->employeeService.getEmployeeById(1L))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Employee not found with id: 1");
+
+        verify(employeeRepository).findById(1L);
+     }
+
+
+
+
+
 
 
 }

@@ -122,7 +122,31 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-		</plugins>
-	</build>
+
+					<!-- JaCoCo Maven Plugin -->
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.8.12</version>
+						<executions>
+							<!-- Attach JaCoCo agent to the test execution -->
+							<execution>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<!-- Generate coverage report after tests run -->
+							<execution>
+								<id>report</id>
+								<phase>test</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+
 
 </project>

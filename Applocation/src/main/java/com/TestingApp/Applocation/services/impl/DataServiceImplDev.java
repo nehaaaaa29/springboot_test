@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Profile("dev")
+
 public class DataServiceImplDev implements DataService {
     @Override
     public String getData() {

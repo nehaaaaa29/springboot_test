@@ -22,5 +22,11 @@ public class ApplocationApplication implements CommandLineRunner {
 	//	System.out.println("The data is: "+dataService.getData());
 
 	}
+	@Override
+	public void run(String... args)throws Exception{
+		System.out.println("my variable: "+myvariable);
+		//	System.out.println("The data is: "+dataService.getData());
+
+	}
 
 }

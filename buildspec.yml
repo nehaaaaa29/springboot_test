@@ -8,7 +8,7 @@ phases:
     commands:
       - cd Applocation
       - echo "Building, Testing and packaging the application..."
-      - mvn clean package
+      - mvn package
   post_build:
     commands:
       - echo "Build, Testing and packaging completed"

@@ -2,15 +2,15 @@ version: 0.2
 
 phases:
   install:
-    runtime-version:
-      java: corretto21
+    runtime-versions:
+      java: corretto17
   build:
     commands:
-      -echo Building, Testing and packaging the application...
-      -mvn package
+      - echo "Building, Testing and packaging the application..."
+      - mvn clean package
   post_build:
     commands:
-      -echo Build, Testing and packaging completed
+      - echo "Build, Testing and packaging completed"
 artifacts:
   files:
     - target/*.jar
@@ -18,4 +18,3 @@ artifacts:
 cache:
   paths:
     - '/root/.m2/**/*'
-

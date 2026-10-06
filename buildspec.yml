@@ -3,9 +3,10 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: corretto17
+      java: corretto21
   build:
     commands:
+      - cd Applocation
       - echo "Building, Testing and packaging the application..."
       - mvn clean package
   post_build:
